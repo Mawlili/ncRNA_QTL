@@ -1,0 +1,20 @@
+#BSUB -J convert_to_vcf
+#BSUB -W 24:00
+#BSUB -o /rsrch5/home/epi/bhattacharya_lab/users/whwu1/log
+#BSUB -e /rsrch5/home/epi/bhattacharya_lab/users/whwu1/log
+#BSUB -q medium 
+#BSUB -n 4
+#BSUB -M 50
+#BSUB -R rusage[mem=200]
+#BSUB -N
+#BSUB -B
+#BSUB -u 
+
+module add plink
+
+cd /rsrch5/home/epi/bhattacharya_lab/data/TCGA/Breast_Carcinoma/genotypes
+i=$LSB_JOBINDEX
+PREFIX="${i}.Breast_Carcinoma"
+plink2 --bfile $PREFIX --recode vcf --out /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/${i}.Breast_Carcinoma.vcf
+
+echo "Converted ${PREFIX} to ${i}.Breast_Carcinoma.vcf"
