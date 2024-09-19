@@ -8,7 +8,7 @@
 #BSUB -R rusage[mem=200]
 #BSUB -N
 #BSUB -B
-#BSUB -u 
+#BSUB -u whwu1@mdanderson.org
 
 module add plink
 
