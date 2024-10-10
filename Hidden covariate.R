@@ -88,24 +88,28 @@ gene_cbt = as.matrix(bed_data[,7:ncol(gene_bed)])
 for (k in seq(100,300,by=25)){
   setwd('/rsrch5/home/epi/bhattacharya_lab/users/whwu1/temp/hidden_cov')
   #file.remove('/u/scratch/a/abtbhatt/bigbrain_rnaseqqc/all_seq_stats.tsv')
-  system('cat flipped* >> /rsrch5/home/epi/bhattacharya_lab/data/TCGA/BRCA/merged_data.tsv')
-  seqStats = fread('/rsrch5/home/epi/bhattacharya_lab/data/TCGA/BRCA/merged_data.tsv')
+  system('cat flipped* >> /rsrch5/home/epi/bhattacharya_lab/data/TCGA/BRCA/merged_cov_with_barcodes.tsv')
+  seqStats = fread('/rsrch5/home/epi/bhattacharya_lab/data/TCGA/BRCA/merged_cov_with_barcodes.tsv')
   #seqStats = subset(seqStats,
   #                  individualID != 'individualID')
-  seqStatMat = as.matrix(seqStats[, -c(1:4)])
+  seqStatMat = as.matrix(seqStats[, -c(1:5)])
   class(seqStatMat) = 'numeric'
-  rownames(seqStatMat) = seqStats$sample_ID
+  rownames(seqStatMat) = seqStats$barcode
   seqStatMat = seqStatMat[,which(apply(seqStatMat,2,var) != 0)]
   seqStatMat = seqStatMat[colnames(gene_bed)[7:ncol(gene_bed)],]
+
+  F <- standardize(seqStatMat)
+  Y <- standardize(t(gene_cbt))
   
   
-  outFolder = '/u/scratch/a/abtbhatt/renormalize_0429'
+  outFolder = '/rsrch5/home/epi/bhattacharya_lab/users/whwu1/temp/hidden_cov'
   hcp <- hidden_convariate_linear(standardize(seqStatMat), 
                                   standardize(t(gene_cbt)), 
                                   lambda=5,lambda2=1, lambda3=1, 
                                   k=k, iter=100)
   
 
+  
   ### Aggregate covariates
   rnaseq = fread('/u/scratch/a/abtbhatt/renormalize_0429/rnaseq_050123_nodups.tsv')
   setwd('/u/project/gandalm/shared/GenomicDatasets-processed/PEC_AMP_AD_Arjun/Metadata')
