@@ -1,3 +1,18 @@
+########################################################################
+# parse arguments
+########################################################################
+
+args <- commandArgs(trailingOnly = TRUE)
+sim_num <- as.numeric(args[1])
+
+########################################################################
+# load dependencies
+########################################################################
+
+library(data.table)
+library(MASS)
+library(pracma)
+
 ### HCP 80 with seqPCs
 hidden_convariate_linear <- function(F,Y,k,lambda,lambda2,lambda3,iter) {
   ## Use Example
@@ -29,8 +44,6 @@ hidden_convariate_linear <- function(F,Y,k,lambda,lambda2,lambda3,iter) {
   #
   # to use the residual data: Residual = Y - Z*B
 
-  library(MASS)
-  library(pracma)
   
   tol = 1e-6;
   
@@ -78,14 +91,26 @@ hidden_convariate_linear <- function(F,Y,k,lambda,lambda2,lambda3,iter) {
 }
 
 
-standardize<- function(X)
+standardize<- function(X){
+  X = as.matrix(X)
+  # n = dim(X)[1]
+  # p = dim(X)[2]
+  
+  X = scale(X, center = TRUE, scale = FALSE)
+  # X = scale(X,center=FALSE, scale=sqrt(apply(X^2,2,sum)))
+  
+  # m = apply(X,2,mean)
+  # st = sqrt(apply(X^2,2,sum));
+  # st_mat = matrix(st, nrow = length(st), ncol = dim(X)[2], byrow=FALSE)
+  # X2 = X / st_mat
+  return (X)
 }
 
-require(data.table)
+
 gene_bed <- fread("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED/named_lifted_log2_input_TCGA_BRCA.bed")
 gene_cbt = as.matrix(bed_data[,7:ncol(gene_bed)])
 
-for (k in seq(100,300,by=25)){
+#for (k in seq(100,300,by=25))
   setwd('/rsrch5/home/epi/bhattacharya_lab/users/whwu1/temp/hidden_cov')
   #file.remove('/u/scratch/a/abtbhatt/bigbrain_rnaseqqc/all_seq_stats.tsv')
   system('cat flipped* >> /rsrch5/home/epi/bhattacharya_lab/data/TCGA/BRCA/merged_cov_with_barcodes.tsv')
@@ -100,147 +125,86 @@ for (k in seq(100,300,by=25)){
 
   F <- standardize(seqStatMat)
   Y <- standardize(t(gene_cbt))
-  
-  
-  outFolder = '/rsrch5/home/epi/bhattacharya_lab/users/whwu1/temp/hidden_cov'
-  hcp <- hidden_convariate_linear(standardize(seqStatMat), 
-                                  standardize(t(gene_cbt)), 
-                                  lambda=5,lambda2=1, lambda3=1, 
-                                  k=k, iter=100)
-  
+
 
   
-  ### Aggregate covariates
-  rnaseq = fread('/u/scratch/a/abtbhatt/renormalize_0429/rnaseq_050123_nodups.tsv')
-  setwd('/u/project/gandalm/shared/GenomicDatasets-processed/PEC_AMP_AD_Arjun/Metadata')
+# HCP parameters to iterate through 
+k_values <- c(10,25,50) # number of hidden components to be estimated
+lambda_values <- c(0.01,0.05,1,5)
+lambda2_values <- c(0.01,0.05,1,5)
+lambda3_values <- c(0.01,0.05,1,5)
+parameter_space <- expand.grid(k_values,
+                               lambda_values,
+                               lambda2_values,
+                               lambda3_values)
   
-  rnaseq = fread('rnaseq_20230501.csv')
-  genotype = fread('genotype.csv')
-  individual = fread('individual_20230421.csv')
-  individual = subset(individual,individualID %in% 
-                        rownames(seqStatMat))
-  individual = individual[!duplicated(individual$individualID),]
-  individual$reportedGender = tolower(individual$reportedGender)
-  individual$sex_out = ifelse(individual$reportedGender != '',
-                              individual$reportedGender,
-                              individual$sex)
-  individual$sex_out = as.factor(individual$sex_out)
-  levels(individual$sex_out) = c('','F','F','M','M')
+# assign parameters based on simulation number ( should be a number between 1 and nrow(parameter_space) )
+# simulation number passed via command line ( see line 16 )
+
+k_values = parameter_space[sim_num,1] 
+lambda_values = parameter_space[sim_num,2]
+lambda2_values = parameter_space[sim_num,3]
+lambda3_values = parameter_space[sim_num,4]
+
+# function to perform cross-validation
+cross_validate <- function(F, Y, k_values, lambda_values, lambda2_values, lambda3_values, iter = 100, n_folds = 5, seed=555) {
+  set.seed(seed)  # For reproducibility
+  folds <- sample(rep(1:n_folds, length.out = nrow(F)))
   
-  covariates = data.frame(individualID = individual$individualID,
-                          age = individual$ageDeath,
-                          sex = individual$sex_out)
-  covariates = covariates[match(rownames(seqStatMat),
-                                covariates$individualID),]
-  covariates$age[is.na(covariates$age)] = mean(covariates$age,
-                                               na.rm=T)
-  covariates$sex = ifelse(covariates$sex == 'F',0,1)
-  covariates$age2 = covariates$age^2
+  results <- data.frame()
   
-  covariates = cbind(covariates,hcp$Z)
-  colnames(covariates) = c('individualID','age','age2','sex',paste0('hcp',1:k))
-  covariates = merge(covariates,individual[,c('individualID',
-                                              'genotypingID')],by='individualID')
+  # loop through all parameter combinations (should really just be 1 in this script)
+  for (k in k_values) {
+    for (lambda in lambda_values) {
+      for (lambda2 in lambda2_values) {
+        for (lambda3 in lambda3_values) {
+          
+          errors <- numeric(n_folds)
+          
+          for (fold in 1:n_folds) {
+            # split the data into training and validation sets
+            train_idx <- which(folds != fold)
+            val_idx <- which(folds == fold)
+            
+            F_train <- F[train_idx, ]
+            Y_train <- Y[train_idx, ]
+            F_val <- F[val_idx, ]
+            Y_val <- Y[val_idx, ]
+            
+            # train the model on the training set
+            model <- hidden_convariate_linear(F_train, Y_train, k = k, lambda = lambda, lambda2 = lambda2, lambda3 = lambda3, iter = iter)
+            
+            # predict on the validation set
+            Z_val <- (Y_val %*% t(model$B) + lambda * F_val %*% model$U) %*% ginv(model$B %*% t(model$B) + lambda * diag(dim(model$B)[1]))
+            error_val <- sum((Y_val - Z_val %*% model$B)^2) / sum(Y_val^2)
+            
+            errors[fold] <- error_val
+          }
+          
+          # save results
+          avg_error <- mean(errors)
+          results <- rbind(results, data.frame(k = k, lambda = lambda, lambda2 = lambda2, lambda3 = lambda3, avg_error = avg_error))
+        }
+      }
+    }
+  }
   
-  
-  gen_pc = fread('/u/project/gandalm/shared/GenomicDatasets-processed/PEC_AMP_AD_Arjun/Genotypes/all_pca.eigenvec')
-  colnames(gen_pc)[2] = 'genotypingID'
-  colnames(gen_pc)[3:22] = paste0('gPC',1:20)
-  
-  covariates = merge(covariates,gen_pc[,c('genotypingID',
-                                          paste0('gPC',1:10))],
-                     by='genotypingID')
-  cov_out = data.frame(Covariate = colnames(covariates)[3:ncol(covariates)])
-  cov_out = cbind(cov_out,t(covariates[,3:ncol(covariates)]))
-  colnames(cov_out) = c('Covariate',covariates$individualID)
-  cov_out = subset(cov_out,!Covariate %in% paste0('gPC',11:20))
-  colnames(cov_out)[1] = 'id'
-  fwrite(cov_out,
-         paste0('/u/scratch/a/abtbhatt/renormalize_0429/cov_hcp',
-                k,
-                '_gene.txt'),
-         sep='\t',
-         col.names=T,
-         row.names=F)
+  return(results[order(results$avg_error), ])
 }
 
+# perform cross-validation
+cv_results <- cross_validate(F, Y, k_values, lambda_values, lambda2_values, lambda3_values, iter = 100, n_folds = 5, seed = sim_num)
+
+# save the results
+save(cv_results,file=paste0("5fold_CV_res_",sim_num,".RData"))
 
 
+  
+ # outFolder = '/rsrch5/home/epi/bhattacharya_lab/users/whwu1/temp/hidden_cov'
+  #hcp <- hidden_convariate_linear(standardize(seqStatMat), 
+  #                                standardize(t(gene_cbt)), 
+   #                               lambda=5,lambda2=1, lambda3=1, 
+   #                               k=k, iter=100)
+  
 
-require(data.table)
-tx_bed = fread('/u/scratch/a/abtbhatt/renormalize_0429/tx_exp_bigbrain_042923_nohcp.bed.gz')
-tx_cbt = as.matrix(tx_bed[,7:ncol(tx_bed)])
-
-for (k in seq(125,300,by=25)){
-  setwd('/u/scratch/a/abtbhatt/bigbrain_rnaseqqc/stats')
-  file.remove('/u/scratch/a/abtbhatt/bigbrain_rnaseqqc/all_seq_stats.tsv')
-  system('cat flipped* >> /u/scratch/a/abtbhatt/bigbrain_rnaseqqc/all_seq_stats.tsv')
-  seqStats = fread('/u/scratch/a/abtbhatt/bigbrain_rnaseqqc/all_seq_stats.tsv')
-  seqStats = subset(seqStats,
-                    individualID != 'individualID')
-  seqStatMat = as.matrix(seqStats[,-1])
-  class(seqStatMat) = 'numeric'
-  rownames(seqStatMat) = seqStats$individualID
-  seqStatMat = seqStatMat[,which(apply(seqStatMat,2,var) != 0)]
-  seqStatMat = seqStatMat[colnames(tx_bed)[7:ncol(tx_bed)],]
   
-  
-  outFolder = '/u/scratch/a/abtbhatt/renormalize_0429'
-  hcp <- hidden_convariate_linear(standardize(seqStatMat), 
-                                  standardize(t(tx_cbt)), 
-                                  lambda=5,lambda2=1, lambda3=1, 
-                                  k=k, iter=100)
-  
-  
-  ### Aggregate covariates
-  rnaseq = fread('/u/scratch/a/abtbhatt/renormalize_0429/rnaseq_050123_nodups.tsv')
-  setwd('/u/project/gandalm/shared/GenomicDatasets-processed/PEC_AMP_AD_Arjun/Metadata')
-  
-  genotype = fread('genotype.csv')
-  individual = fread('individual_20230421.csv')
-  individual = subset(individual,individualID %in% 
-                        rownames(seqStatMat))
-  individual = individual[!duplicated(individual$individualID),]
-  individual$reportedGender = tolower(individual$reportedGender)
-  individual$sex_out = ifelse(individual$reportedGender != '',
-                              individual$reportedGender,
-                              individual$sex)
-  individual$sex_out = as.factor(individual$sex_out)
-  levels(individual$sex_out) = c('','F','F','M','M')
-  
-  covariates = data.frame(individualID = individual$individualID,
-                          age = individual$ageDeath,
-                          sex = individual$sex_out)
-  covariates = covariates[match(rownames(seqStatMat),
-                                covariates$individualID),]
-  covariates$age[is.na(covariates$age)] = mean(covariates$age,
-                                               na.rm=T)
-  covariates$sex = ifelse(covariates$sex == 'F',0,1)
-  covariates$age2 = covariates$age^2
-  
-  covariates = cbind(covariates,hcp$Z)
-  colnames(covariates) = c('individualID','age','age2','sex',paste0('hcp',1:k))
-  covariates = merge(covariates,individual[,c('individualID',
-                                              'genotypingID')],by='individualID')
-  
-  
-  gen_pc = fread('/u/project/gandalm/shared/GenomicDatasets-processed/PEC_AMP_AD_Arjun/Genotypes/all_pca.eigenvec')
-  colnames(gen_pc)[2] = 'genotypingID'
-  colnames(gen_pc)[3:22] = paste0('gPC',1:20)
-  
-  covariates = merge(covariates,gen_pc[,c('genotypingID',
-                                          paste0('gPC',1:10))],
-                     by='genotypingID')
-  cov_out = data.frame(Covariate = colnames(covariates)[3:ncol(covariates)])
-  cov_out = cbind(cov_out,t(covariates[,3:ncol(covariates)]))
-  colnames(cov_out) = c('Covariate',covariates$individualID)
-  cov_out = subset(cov_out,!Covariate %in% paste0('gPC',11:20))
-  colnames(cov_out)[1] = 'id'
-  fwrite(cov_out,
-         paste0('/u/scratch/a/abtbhatt/renormalize_0429/cov_hcp',
-                k,
-                '_isoform.txt'),
-         sep='\t',
-         col.names=T,
-         row.names=F)
-}
