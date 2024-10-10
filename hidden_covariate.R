@@ -197,7 +197,7 @@ cross_validate <- function(F, Y, k_values, lambda_values, lambda2_values, lambda
 cv_results <- cross_validate(F, Y, k_values, lambda_values, lambda2_values, lambda3_values, iter = 100, n_folds = 5, seed = sim_num)
 
 # save the results
-save(cv_results,file=paste0("5fold_CV_res_",sim_num,".RData"))
+save(cv_results,file=paste0("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/hidden_cov/5fold_CV_res_",sim_num,".RData"))
 
 
   
