@@ -129,14 +129,15 @@ gene_cbt = as.matrix(gene_bed[,7:ncol(gene_bed)])
 
   
 # HCP parameters to iterate through 
-k_values <- c(10,25,50) # number of hidden components to be estimated
-lambda_values <- c(0.01,0.05,1,5)
-lambda2_values <- c(0.01,0.05,1,5)
-lambda3_values <- c(0.01,0.05,1,5)
+k_values <- c(5, 10, 20, 50, 100)
+lambda_values <- c(0.01, 0.1, 1, 5, 10)
+lambda2_values <- c(0.01, 0.1, 1, 5, 10)
+lambda3_values <- c(0.01, 0.1, 1, 5, 10)
 parameter_space <- expand.grid(k_values,
                                lambda_values,
                                lambda2_values,
                                lambda3_values)
+#nrow = 625
   
 # assign parameters based on simulation number ( should be a number between 1 and nrow(parameter_space) )
 # simulation number passed via command line ( see line 16 )
