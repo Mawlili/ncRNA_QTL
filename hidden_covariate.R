@@ -108,7 +108,7 @@ standardize<- function(X){
 
 
 gene_bed <- fread("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED/named_lifted_log2_input_TCGA_BRCA.bed")
-gene_cbt = as.matrix(bed_data[,7:ncol(gene_bed)])
+gene_cbt = as.matrix(gene_bed[,7:ncol(gene_bed)])
 
 #for (k in seq(100,300,by=25))
   setwd('/rsrch5/home/epi/bhattacharya_lab/users/whwu1/temp/hidden_cov')
