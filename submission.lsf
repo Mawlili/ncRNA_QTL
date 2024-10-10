@@ -1,0 +1,11 @@
+#BSUB -J hidden_covariate[1-625]
+#BSUB -W 24:00
+#BSUB -q medium 
+#BSUB -n 12
+#BSUB -M 30
+#BSUB -R rusage[mem=360]
+#BSUB -o /rsrch5/home/epi/bhattacharya_lab/users/whwu1/log
+#BSUB -e /rsrch5/home/epi/bhattacharya_lab/users/whwu1/log
+
+module add R/4.3.1
+Rscript /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/scripts/ncRNA_QTL/hidden_covariate.R $LSB_JOBINDEX
