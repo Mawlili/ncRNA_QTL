@@ -1,3 +1,6 @@
+library(data.table)
+library(MASS)
+library(pracma)
 ### HCP 80 with seqPCs
 hidden_convariate_linear <- function(F,Y,k,lambda,lambda2,lambda3,iter) {
   ## Use Example
@@ -28,8 +31,6 @@ hidden_convariate_linear <- function(F,Y,k,lambda,lambda2,lambda3,iter) {
   #      o: value of objective function on consecutive iterations.
   #
   # to use the residual data: Residual = Y - Z*B
-  library(MASS)
-  library(pracma)
   
   tol = 1e-6;
   
@@ -109,7 +110,7 @@ gene_cbt = as.matrix(gene_bed[,7:ncol(gene_bed)])
   seqStatMat = seqStatMat[,which(apply(seqStatMat,2,var) != 0)]
   seqStatMat = seqStatMat[colnames(gene_bed)[7:ncol(gene_bed)],]
   
-  outFolder = '/u/scratch/a/abtbhatt/renormalize_0429'
+  outFolder = '/rsrch5/home/epi/bhattacharya_lab/users/whwu1/temp/hidden_cov'
   hcp <- hidden_convariate_linear(standardize(seqStatMat), 
                                   standardize(t(gene_cbt)), 
                                   lambda=10,lambda2=0.01, lambda3=1, 
