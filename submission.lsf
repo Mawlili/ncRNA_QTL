@@ -8,7 +8,7 @@
 #BSUB -e /rsrch5/home/epi/bhattacharya_lab/users/whwu1/log
 
 module add R/4.3.1
-Rscript /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/scripts/ncRNA_QTL/hidden_covariate.R $LSB_JOBINDEX
+Rscript /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/scripts/ncRNA_QTL/hidden_covariate_cross_validation.R $LSB_JOBINDEX
 #best k find to be:      
 #k lambda lambda2 lambda3 avg_error sim_num
 #275 100  10.00    0.01    1.00 0.6158545     275
