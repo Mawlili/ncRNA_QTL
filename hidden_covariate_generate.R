@@ -115,4 +115,5 @@ gene_cbt = as.matrix(gene_bed[,7:ncol(gene_bed)])
                                   standardize(t(gene_cbt)), 
                                   lambda=10,lambda2=0.01, lambda3=1, 
                                   k=100, iter=100)
+  save(hcp, file = "/rsrch5/home/epi/bhattacharya_lab/users/whwu1/temp/hidden_cov/hcp.RData")
     
