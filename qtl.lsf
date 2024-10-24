@@ -10,7 +10,7 @@
 #BSUB -B
 #BSUB -u 
 
-
+#vcf and bed are zipped and tabix indexed. bed needed to be sorted based on first and second column before zip
 module add qtltools
 QTLtools cis --vcf /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/combined_formatted_vcf_file.vcf.gz \
              --bed /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED/non_protein_coding_updated_sorted.bed.gz \
