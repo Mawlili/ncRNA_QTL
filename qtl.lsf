@@ -1,1 +1,21 @@
+#BSUB -J cis qtl
+#BSUB -W 24:00
+#BSUB -o /rsrch5/home/epi/bhattacharya_lab/users/whwu1/log
+#BSUB -e /rsrch5/home/epi/bhattacharya_lab/users/whwu1/log
+#BSUB -q medium 
+#BSUB -n 1
+#BSUB -M 100
+#BSUB -R rusage[mem=100]
+#BSUB -N
+#BSUB -B
+#BSUB -u 
+
+
+module add qtltools
+QTLtools cis --vcf /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/combined_formatted_vcf_file.vcf.gz \
+             --bed /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED/non_protein_coding_updated_sorted.bed.gz \
+             --cov /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/cov_with_sex_age_hcp_pca_transposed.tsv \
+             --out /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/significant_output_cis_qtl_non_protein_coding.txt \
+             --nominal 0.05
+            # --window 1000000  
 
