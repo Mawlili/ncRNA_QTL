@@ -3,8 +3,8 @@
 #BSUB -o /rsrch5/home/epi/bhattacharya_lab/users/whwu1/log
 #BSUB -e /rsrch5/home/epi/bhattacharya_lab/users/whwu1/log
 #BSUB -q medium 
-#BSUB -n 1
-#BSUB -M 100
+#BSUB -n 2
+#BSUB -M 50
 #BSUB -R rusage[mem=100]
 
 #vcf and bed are zipped and tabix indexed. bed needed to be sorted based on first and second column before zip
