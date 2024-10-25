@@ -13,6 +13,6 @@ QTLtools cis --vcf /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/comb
              --bed /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED/non_protein_coding_updated_sorted.bed.gz \
              --cov /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/cov_t_exported.txt \
              --out /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/significant_output_cis_qtl_non_protein_coding.txt \
-             --nominal 1e-6
+             --nominal 0.1
             # --window 1000000  
 
