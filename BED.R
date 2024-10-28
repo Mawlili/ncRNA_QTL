@@ -3,8 +3,8 @@ library(dplyr)
 library(tximeta)
 
 load("/rsrch5/home/epi/bhattacharya_lab/data/TCGA/BRCA/se.RData")
-
-expr_data <- assays(se)$counts
+se_gene <- summarizeToGene(se)
+expr_data <- assays(se_gene)$counts
 granges <- rowRanges(se)
 gr_df <- as.data.frame(granges)
 
