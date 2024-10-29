@@ -1,8 +1,10 @@
 library(SummarizedExperiment)
 library(dplyr)
 library(tximeta)
+library(GenomicFeatures)
 
 load("/rsrch5/home/epi/bhattacharya_lab/data/TCGA/BRCA/se.RData")
+txdb <- makeTxDbFromGFF("/rsrch5/home/epi/bhattacharya_lab/data/GenomicReferences/txome/gencode_v38/gencode.v38.annotation.gtf", format = "gtf")
 se_gene <- summarizeToGene(se)
 expr_data <- assays(se_gene)$counts
 granges <- rowRanges(se)
