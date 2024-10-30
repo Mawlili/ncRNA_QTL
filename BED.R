@@ -70,6 +70,8 @@ merged_df$end.x <- merged_df$end.y
   colnames(merged_df)[colnames(merged_df) == "start.x"] <- "start"
   colnames(merged_df)[colnames(merged_df) == "end.x"] <- "end"
 
+merged_df$Chr <- gsub("^chr", "", merged_df$Chr)
+
 write.table(
   merged_df,
   file = "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted.bed",
