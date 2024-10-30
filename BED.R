@@ -3,6 +3,8 @@ library(dplyr)
 library(tximeta)
 library(GenomicFeatures)
 library(GenomicRanges)
+library(biomaRt)
+library(data.table)
 
 load("/rsrch5/home/epi/bhattacharya_lab/data/TCGA/BRCA/se.RData")
 txdb <- makeTxDbFromGFF("/rsrch5/home/epi/bhattacharya_lab/data/GenomicReferences/txome/gencode_v38/gencode.v38.annotation.gtf", format = "gtf")
@@ -75,6 +77,35 @@ merged_df$Chr <- gsub("^chr", "", merged_df$Chr)
 write.table(
   merged_df,
   file = "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted.bed",
+  sep = "\t",
+  quote = FALSE,
+  row.names = FALSE,
+  col.names = TRUE
+)
+bed <- fread("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted.bed")
+bed$pid <- sub("\\..*", "", bed$pid)
+ensembl <- useMart("ensembl", dataset = "hsapiens_gene_ensembl")
+gene_info <- getBM(
+    attributes = c("ensembl_gene_id", "gene_biotype"),
+    filters = "ensembl_gene_id",
+    values = bed$pid,
+    mart = ensembl
+)
+merged_df <- merge(bed, gene_info, by.x = "pid", by.y = "ensembl_gene_id", all.x = TRUE)
+protein_coding_df <- subset(merged_df, gene_biotype == "protein_coding")
+non_coding_df <- subset(merged_df, gene_biotype != "protein_coding")
+
+write.table(
+  protein_coding_df,
+  file = "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted_coding.bed",
+  sep = "\t",
+  quote = FALSE,
+  row.names = FALSE,
+  col.names = TRUE
+)
+write.table(
+  non_coding_df,
+  file = "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted_non_coding.bed",
   sep = "\t",
   quote = FALSE,
   row.names = FALSE,
