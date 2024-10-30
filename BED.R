@@ -5,6 +5,7 @@ library(GenomicFeatures)
 library(GenomicRanges)
 library(biomaRt)
 library(data.table)
+library(dplyr)
 
 load("/rsrch5/home/epi/bhattacharya_lab/data/TCGA/BRCA/se.RData")
 txdb <- makeTxDbFromGFF("/rsrch5/home/epi/bhattacharya_lab/data/GenomicReferences/txome/gencode_v38/gencode.v38.annotation.gtf", format = "gtf")
@@ -92,9 +93,17 @@ gene_info <- getBM(
     mart = ensembl
 )
 merged_df <- merge(bed, gene_info, by.x = "pid", by.y = "ensembl_gene_id", all.x = TRUE)
+merged_df <- merged_df %>%
+  select(Chr, start, end, strand, pid, gid, everything())
+merged_df <- merged_df %>%
+  filter(!is.na(Chr))
+
 protein_coding_df <- subset(merged_df, gene_biotype == "protein_coding")
 non_coding_df <- subset(merged_df, gene_biotype != "protein_coding")
-
+protein_coding_df <- protein_coding_df %>%
+  select(-gene_biotype)
+non_coding_df <- non_coding_df %>%
+  select(-gene_biotype)
 write.table(
   protein_coding_df,
   file = "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted_coding.bed",
@@ -111,3 +120,12 @@ write.table(
   row.names = FALSE,
   col.names = TRUE
 )
+##linux
+(head -n 1 TCGA_BRCA_gene_level_log2_lifted_coding.bed && tail -n +2 TCGA_BRCA_gene_level_log2_lifted_coding.bed | sort -k1,1 -k2,2n) > TCGA_BRCA_gene_level_log2_lifted_coding_sorted.bed
+
+(head -n 1 TCGA_BRCA_gene_level_log2_lifted_non_coding.bed && tail -n +2 TCGA_BRCA_gene_level_log2_lifted_non_coding.bed | sort -k1,1 -k2,2n) > TCGA_BRCA_gene_level_log2_lifted_non_coding_sorted.bed
+
+bgzip TCGA_BRCA_gene_level_log2_lifted_coding_sorted.bed
+bgzip TCGA_BRCA_gene_level_log2_lifted_non_coding_sorted.bed
+tabix -p bed TCGA_BRCA_gene_level_log2_lifted_non_coding_sorted.bed.gz
+tabix -p bed TCGA_BRCA_gene_level_log2_lifted_coding_sorted.bed.gz
