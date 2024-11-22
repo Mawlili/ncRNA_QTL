@@ -13,5 +13,5 @@ module add qtltools
 QTLtools trans --vcf /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/filtered_combined_formatted_vcf_file.vcf.gz \
              --bed /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted_coding_sorted.bed.gz \
              --cov /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/cov_remove_duplicate.txt \
-             --out /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/significant_output_trans_qtl_non_protein_coding.txt \
+             --out /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/significant_output_trans_qtl_protein_coding.txt \
              --nominal 1e-6
