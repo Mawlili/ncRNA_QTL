@@ -6,6 +6,7 @@
 #BSUB -n 2
 #BSUB -M 50
 #BSUB -R rusage[mem=100]
+#BSUB -u whwu1@mdanderson.org
 
 #vcf and bed are zipped and tabix indexed. bed needed to be sorted based on first and second column before zip
 module add qtltools
