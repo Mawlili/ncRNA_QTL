@@ -13,6 +13,6 @@ trans_qtl <- fread(trans_qtl_file, header = FALSE)
 colnames(cis_qtl) <- c("phe_id", "chr", "start", "end", "strand", "gene_id", "other1", "snp", "snp_chr", "snp_start", "snp_end", "p_value", "effect_size", "std_error", "flag")
 colnames(trans_qtl) <- c("phe_id", "gene_chr", "gene_pos", "snp_id", "snp_chr", "snp_pos", "p_value", "effect_dir", "effect_size")
 
-cis_qtl_significant <- cis_qtl %>% filter(p_value <= 1e-2) %>% select(chr, start, p_value, snp)
-trans_qtl_significant <- trans_qtl %>% filter(p_value <= 1e-2) %>% select(gene_chr, gene_pos, p_value, snp_id)
+cis_qtl_significant <- cis_qtl %>% filter(p_value <= 1e-6) %>% select(chr, start, p_value, snp)
+trans_qtl_significant <- trans_qtl %>% filter(p_value <= 1e-6) %>% select(gene_chr, gene_pos, p_value, snp_id)
 overlapping_qtls <- inner_join(trans_qtl_significant, cis_qtl_significant, by = c("snp_id" = "snp"))
