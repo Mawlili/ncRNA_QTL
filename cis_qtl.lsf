@@ -11,7 +11,7 @@
 #vcf and bed are zipped and tabix indexed. bed needed to be sorted based on first and second column before zip
 module add qtltools
 QTLtools cis --vcf /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/combined_formatted_vcf_file.vcf.gz \
-             --bed /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted_non_coding_sorted.bed.gz \
+             --bed /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted_non_coding_sorted_fixed_column_order.bed.gz \
              --cov /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/cov_remove_duplicate.txt \
              --out /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/significant_output_cis_qtl_non_protein_coding.txt \
              --nominal 1e-6
