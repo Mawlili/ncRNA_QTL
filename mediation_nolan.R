@@ -28,7 +28,7 @@ covar <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/q
 nc_bed <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted_non_coding_sorted.bed") |> dplyr::select(-pid)
 pc_bed <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted_coding_sorted.bed") |> dplyr::select(-pid)
 # SNP dosages
-snp_dosage <- readRDS("../1_dataprep/data/snp_dosage.RDS")
+snp_dosage <- readRDS("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/out_files/snp_dosage.RDS")
 
 # Step 2: Data engineer
 # X_C: Matrix of mean-centered covariates (n samples x k covariates)
