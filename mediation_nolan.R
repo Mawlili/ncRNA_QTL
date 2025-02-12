@@ -6,7 +6,7 @@ if (!requireNamespace("pacman", quietly = TRUE)) install.packages("pacman")
 pacman::p_load(dplyr, tidyr, readr,
                broom, stringr, future,
                furrr)
-source("./mediation_functions.R")
+#source("./mediation_functions.R")
 library(tictoc)
 library(data.table)
 
