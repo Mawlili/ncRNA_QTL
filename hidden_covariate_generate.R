@@ -95,7 +95,7 @@ standardize<- function(X)
 }
 
 require(data.table)
-gene_bed <- fread("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED/named_lifted_log2_input_TCGA_BRCA.bed")
+gene_bed <- fread("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted.bed")
 gene_cbt = as.matrix(gene_bed[,7:ncol(gene_bed)])
 
   setwd('/rsrch5/home/epi/bhattacharya_lab/users/whwu1/temp/hidden_cov')
@@ -106,7 +106,7 @@ gene_cbt = as.matrix(gene_bed[,7:ncol(gene_bed)])
   #                  individualID != 'individualID')
   seqStatMat = as.matrix(seqStats[, -c(1:5)])
   class(seqStatMat) = 'numeric'
-  rownames(seqStatMat) = seqStats$barcode
+  rownames(seqStatMat) = seqStats$tcga_barcode
   seqStatMat = seqStatMat[,which(apply(seqStatMat,2,var) != 0)]
   seqStatMat = seqStatMat[colnames(gene_bed)[7:ncol(gene_bed)],]
   
