@@ -5,7 +5,7 @@ library(dplyr)
 
 #loading data
 load("/rsrch5/home/epi/bhattacharya_lab/users/whwu1/temp/hidden_cov/hcp.RData")
-cov1 <- fread('/rsrch5/home/epi/bhattacharya_lab/data/TCGA/BRCA/merged_cov_with_barcodes.tsv')
+cov <- fread('/rsrch5/home/epi/bhattacharya_lab/data/TCGA/BRCA/merged_cov_with_barcodes.tsv')
 sex <- fread('/rsrch5/home/epi/bhattacharya_lab/data/TCGA/BRCA/sex_data.tsv')
 age <- fread('/rsrch5/home/epi/bhattacharya_lab/data/TCGA/BRCA/age_data.tsv')
 
@@ -42,4 +42,4 @@ merged_cov <- merged_cov %>%
 #export
 cov_export <- as.data.frame(t(merged_cov))
 cov_export <- cbind(id = rownames(cov_export), cov_export)
-write.table(cov_export, "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/merged_cov_full_barcode.txt", sep = "\t", row.names = FALSE, quote = FALSE)
+write.table(cov_export, "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/merged_cov_full_barcode.txt", sep = "\t", row.names = FALSE, col.names = FALSE, quote = FALSE)
