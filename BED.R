@@ -116,18 +116,20 @@ write.table(
 )
 write.table(
   non_coding_df,
-  file = "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted_non_coding.bed",
+    file = "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted_non_coding.bed",
   sep = "\t",
   quote = FALSE,
   row.names = FALSE,
   col.names = TRUE
 )
 ##linux
-(head -n 1 TCGA_BRCA_gene_level_log2_lifted_coding.bed && tail -n +2 TCGA_BRCA_gene_level_log2_lifted_coding.bed | sort -k1,1 -k2,2n) > TCGA_BRCA_gene_level_log2_lifted_coding_sorted.bed
+(head -n 1 TCGA_BRCA_gene_level_log2_lifted_coding_tumor_sample.bed && tail -n +2 TCGA_BRCA_gene_level_log2_lifted_coding_tumor_sample.bed | sort -k1,1 -k2,2n) > TCGA_BRCA_gene_level_log2_lifted_coding_tumor_sample_sorted.bed
 
-(head -n 1 TCGA_BRCA_gene_level_log2_lifted_non_coding.bed && tail -n +2 TCGA_BRCA_gene_level_log2_lifted_non_coding.bed | sort -k1,1 -k2,2n) > TCGA_BRCA_gene_level_log2_lifted_non_coding_sorted.bed
+(head -n 1 TCGA_BRCA_gene_level_log2_lifted_non_coding_tumor_sample.bed && tail -n +2 TCGA_BRCA_gene_level_log2_lifted_non_coding_tumor_sample.bed | sort -k1,1 -k2,2n) > TCGA_BRCA_gene_level_log2_lifted_non_coding_tumor_sample_sorted.bed
 
-bgzip TCGA_BRCA_gene_level_log2_lifted_coding_sorted.bed
-bgzip TCGA_BRCA_gene_level_log2_lifted_non_coding_sorted.bed
-tabix -p bed TCGA_BRCA_gene_level_log2_lifted_non_coding_sorted.bed.gz
-tabix -p bed TCGA_BRCA_gene_level_log2_lifted_coding_sorted.bed.gz
+module load htslib
+bgzip TCGA_BRCA_gene_level_log2_lifted_coding_tumor_sample_sorted.bed
+bgzip TCGA_BRCA_gene_level_log2_lifted_non_coding_tumor_sample_sorted.bed
+
+tabix -p bed TCGA_BRCA_gene_level_log2_lifted_non_coding_tumor_sample_sorted.bed.gz
+tabix -p bed TCGA_BRCA_gene_level_log2_lifted_coding_tumor_sample_sorted.bed.gz
