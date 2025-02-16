@@ -20,7 +20,7 @@ pacman::p_load(dplyr, magrittr, tidyr,
 # read in data
 snp_data_file <- bigsnpr::snp_readBed("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/bigsnpr/bigsnpr.bed")
 snp_data <- readRDS(snp_data_file)
-covar <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/cov_remove_duplicate.txt",
+covar <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_cov_overlap.txt",
                          col_names = TRUE)[,-1]
 #load(biomart_file)
 
