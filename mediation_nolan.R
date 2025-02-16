@@ -11,7 +11,7 @@ library(tictoc)
 library(data.table)
 
 P = 10000
-num_workers = 7
+num_workers = 5
 #args <- commandArgs(trailingOnly = TRUE)
 #P <- args[1] |> as.integer() # number of permutations
 #num_workers <- args[2] |> as.integer() # number of cores
