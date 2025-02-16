@@ -145,12 +145,13 @@ covar <- read.table("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/co
                  stringsAsFactors = FALSE, 
                  check.names = FALSE)
 covar <- covar[, -1]
-covar[102, ] <- 1
+covar[102, ] <- ifelse(covar[102, ] == "female", 1,
+                            ifelse(covar[102, ] == "male", 2, covar[102, ]))
 covar <- data.frame(lapply(covar, as.numeric))
 
 # gene expression data
-nc_bed <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted_non_coding_sorted.bed") |> dplyr::select(-pid)
-pc_bed <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted_coding_sorted.bed") |> dplyr::select(-pid)
+nc_bed <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_non_coding_overlap_sorted.bed") |> dplyr::select(-pid)
+pc_bed <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_coding_overlap_sorted.bed") |> dplyr::select(-pid)
 # SNP dosages
 snp_dosage <- readRDS("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/out_files/snp_dosage.RDS")
 
@@ -173,6 +174,8 @@ pc_bed <- pc_bed %>%
   mutate(gid = sub("\\..*", "", gid))
 nc_bed <- nc_bed %>%
   mutate(gid = sub("\\..*", "", gid))
+
+
 pc_intriplet_express <- pc_bed |>
   dplyr::filter(gid %in% unique(triplets$distal_pc)) |>
   dplyr::select("#Chr", "start", "end", "gid", "strand",
@@ -189,12 +192,10 @@ pc_long <- pc_intriplet_express |>
                       names_to = "sample_id",
                       values_to = "exp")
 
-#pc_wide <- pc_long |>
-#  tidyr::pivot_wider(names_from = gid,
- #                    values_from = exp)
-
-pc_wide <- dcast(setDT(pc_long), sample_id ~ gid, value.var = "exp", fun.aggregate = mean) |> 
-  as_tibble()
+pc_wide <- pc_long |>
+  tidyr::pivot_wider(names_from = gid,
+                    values_from = exp,
+                      values_fn = mean)
 
 nc_long <- nc_intriplet_express |>
   dplyr::select(gid, contains("TCGA")) |>
@@ -202,15 +203,10 @@ nc_long <- nc_intriplet_express |>
                       names_to = "sample_id",
                       values_to = "exp")
 
-#nc_wide <- nc_long |>
-#  tidyr::pivot_wider(names_from = gid,
-#                     values_from = exp)
-#duplicate <- nc_long |>
-#  dplyr::summarise(n = dplyr::n(), .by = c(sample_id, gid)) |>
-#  dplyr::filter(n > 1L) 
-
-nc_wide <- dcast(setDT(nc_long), sample_id ~ gid, value.var = "exp", fun.aggregate = mean) |> 
-  as_tibble()
+nc_wide <- nc_long |>
+  tidyr::pivot_wider(names_from = gid,
+                     values_from = exp,
+                        values_fn = mean)
 
 # Subset SNP dosage matrix to SNPs of interest
 sig_snp_dosage <- snp_dosage[,which(colnames(snp_dosage) %in% triplets$snp_id)]
