@@ -1,9 +1,9 @@
 #BSUB -J mediation
-#BSUB -W 48:00
-#BSUB -q long 
-#BSUB -n 50
-#BSUB -M 20
-#BSUB -R rusage[mem=1000]
+#BSUB -W 24:00
+#BSUB -q medium 
+#BSUB -n 10
+#BSUB -M 40
+#BSUB -R rusage[mem=400]
 #BSUB -o /rsrch5/home/epi/bhattacharya_lab/users/whwu1/log
 #BSUB -e /rsrch5/home/epi/bhattacharya_lab/users/whwu1/log
 
