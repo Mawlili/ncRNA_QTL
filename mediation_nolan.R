@@ -10,11 +10,11 @@ pacman::p_load(dplyr, tidyr, readr,
 library(tictoc)
 library(data.table)
 
-# P = 10000
-# num_workers = 50
-args <- commandArgs(trailingOnly = TRUE)
-P <- args[1] |> as.integer() # number of permutations
-num_workers <- args[2] |> as.integer() # number of cores
+P = 10000
+num_workers = 50
+#args <- commandArgs(trailingOnly = TRUE)
+#P <- args[1] |> as.integer() # number of permutations
+#num_workers <- args[2] |> as.integer() # number of cores
 
 cat("P: ", P, "\n")
 cat("num_workers: ", num_workers, "\n")
