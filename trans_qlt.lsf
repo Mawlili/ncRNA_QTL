@@ -11,19 +11,19 @@
 #vcf and bed are zipped and tabix indexed. bed needed to be sorted based on first and second column before zip
 module add qtltools
 QTLtools trans --vcf /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/filtered_combined_formatted_vcf_file.vcf.gz \
-             --bed /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_coding_sorted.bed.gz \
-             --cov /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_cov.txt \
+             --bed /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_coding_overlap_sorted.bed.gz \
+             --cov /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_cov_overlap.txt \
              --out /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/significant_output_trans_qtl_protein_coding.txt \
              --nominal 1e-6
 
 
-(head -n 1 short_non_coding.bed && tail -n +2 short_non_coding.bed | sort -k1,1 -k2,2n) > short_non_coding_sorted.bed
+(head -n 1 short_non_coding_overlap.bed && tail -n +2 short_non_coding_overlap.bed | sort -k1,1 -k2,2n) > short_non_coding_overlap_sorted.bed
 
-(head -n 1 short_coding.bed && tail -n +2 short_coding.bed | sort -k1,1 -k2,2n) > short_coding_sorted.bed
+(head -n 1 short_coding_overlap.bed && tail -n +2 short_coding_overlap.bed | sort -k1,1 -k2,2n) > short_coding_overlap_sorted.bed
 
 module load htslib
-bgzip short_coding_sorted.bed
-bgzip short_non_coding_sorted.bed
+bgzip short_coding_overlap_sorted.bed
+bgzip short_non_coding_overlap_sorted.bed
 
-tabix -p bed short_coding_sorted.bed.gz
-tabix -p bed short_non_coding_sorted.bed.gz
+tabix -p bed short_coding_overlap_sorted.bed.gz
+tabix -p bed short_non_coding_overlap_sorted.bed.gz
