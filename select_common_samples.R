@@ -8,7 +8,7 @@ short_coding <- as.data.frame(short_coding)
 cov <- fread("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_cov.txt")
 cov <- as.data.frame(cov)
 
-bed_cols <- c("#Chr", "start", "end", "pid", "gid", "strand")
+bed_cols <- c("Chr", "start", "end", "pid", "gid", "strand")
 cov_col <- c("SampleID")
 
 overlap_cols_non_coding <- intersect(colnames(short_non_coding), samples)
@@ -17,6 +17,9 @@ overlap_cov <- intersect(colnames(cov), samples)
 subset_non_coding <- short_non_coding[ , c(bed_cols, overlap_cols_non_coding)]
 subset_coding     <- short_coding[, c(bed_cols, overlap_cols_coding)]
 subset_cov <- cov[,c(cov_col, overlap_cov)]
+
+colnames(subset_non_coding)[1] <- "#Chr"
+colnames(subset_coding)[1] <- "#Chr"
 
 write.table(subset_non_coding, "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_non_coding_overlap.bed",
             sep = "\t", quote = FALSE, row.names = FALSE, col.names = TRUE)
