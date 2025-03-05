@@ -9,9 +9,10 @@ library(dplyr)
 library(rtracklayer)
 
 
+#load("/rsrch5/home/epi/bhattacharya_lab/data/TCGA/BRCA/se_gencodev38.RData")
 load("/rsrch5/home/epi/bhattacharya_lab/data/TCGA/BRCA/se_gencodev38.RData")
 txdb <- makeTxDbFromGFF("/rsrch5/home/epi/bhattacharya_lab/data/GenomicReferences/txome/gencode_v38/gencode.v38.annotation.gtf", format = "gtf")
-se_gene <- summarizeToGene(se)
+#se_gene <- summarizeToGene(se)
 expr_data <- assays(gse)$abundance
 granges <- rowRanges(gse)
 gr_df <- as.data.frame(granges)
