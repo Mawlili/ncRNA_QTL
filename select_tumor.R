@@ -1,9 +1,10 @@
+library(data.table)
 # Define file paths
-input_file <- "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/merged_cov_full_barcode.txt"
-output_file <- "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/merged_cov_full_barcode_tumor_sample.txt"
+input_file <- "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted_non_coding.bed"
+output_file <- "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted_non_coding_tumor_sample.bed"
 
-# Read the BED file
-bed_data <- read.table(input_file, header = TRUE, sep = "\t", check.names = FALSE)
+
+bed_data <- fread(input_file, header = TRUE, sep = "\t")
 
 # Extract column names
 column_names <- colnames(bed_data)
