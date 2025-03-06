@@ -1,7 +1,8 @@
 library(data.table)
+library(dplyr)
 # Define file paths
-input_file <- "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted_non_coding.bed"
-output_file <- "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted_non_coding_tumor_sample.bed"
+input_file <- "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted_coding.bed"
+output_file <- "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/TCGA_BRCA_BED_GENE_LEVEL/TCGA_BRCA_gene_level_log2_lifted_coding_tumor_sample.bed"
 
 
 bed_data <- fread(input_file, header = TRUE, sep = "\t")
@@ -23,7 +24,10 @@ is_selected <- function(name) {
 selected_columns <- column_names[sapply(column_names, is_selected)]
 
 # Keep the first six columns and the selected sample columns
-filtered_data <- bed_data[, c(colnames(bed_data)[1:6], selected_columns), drop = FALSE]
+
+filtered_data <- bed_data %>%
+  select(all_of(c("Chr", "start", "end", "pid", "gid", "strand", selected_columns)))
+
 
 write.table(filtered_data, output_file, sep = "\t", quote = FALSE, row.names = FALSE, col.names = TRUE)
 
