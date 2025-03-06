@@ -1,0 +1,10 @@
+(head -n 1 short_coding_overlap.bed && tail -n +2 short_coding_overlap.bed | sort -k1,1 -k2,2n) > short_coding_overlap_sorted.bed
+
+(head -n 1 short_non_coding_overlap.bed && tail -n +2 short_non_coding_overlap.bed | sort -k1,1 -k2,2n) > short_non_coding_overlap_sorted.bed
+
+module load htslib
+bgzip short_coding_overlap_sorted.bed
+bgzip short_non_coding_overlap_sorted.bed
+
+tabix -p bed short_coding_overlap_sorted.bed.gz
+tabix -p bed short_non_coding_overlap_sorted.bed.gz
