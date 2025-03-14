@@ -9,9 +9,15 @@
 #BSUB -u whwu1@mdanderson.org
 
 #vcf and bed are zipped and tabix indexed. bed needed to be sorted based on first and second column before zip
-module add qtltools
+module add qtltools          #    --qtl /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_cov_overlap.txt \
+
+#QTLtools correct \
+ #   --bed /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_non_coding_overlap_sorted.bed.gz \
+  #  --normal \
+   # --out /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_non_coding_overlap_sorted_normalized.bed.gz
+
 QTLtools cis --vcf /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/combined_formatted_vcf_file.vcf.gz \
-             --bed /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_non_coding_overlap_sorted.bed.gz \
+             --bed /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_non_coding_overlap_sorted_normalized.bed.gz \
              --cov /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_cov_overlap.txt \
              --out /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/significant_output_cis_qtl_non_protein_coding.txt \
              --nominal 1e-6
