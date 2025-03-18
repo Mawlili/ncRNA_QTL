@@ -179,7 +179,7 @@ for (t in  seq(start_index, end_index)) {
   
   # save as we go
   output_file <- file.path(
-  "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/mediation",
+  "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/BRCA_mediation_filtered",
   paste0("mediation_res_", job_id, ".RDS")
 )
   
