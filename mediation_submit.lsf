@@ -1,4 +1,4 @@
-#BSUB -J mediation[1-1532]
+#BSUB -J mediation[1-12]
 #BSUB -W 24:00
 #BSUB -q medium 
 #BSUB -n 5
