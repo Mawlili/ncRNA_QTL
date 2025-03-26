@@ -1,0 +1,14 @@
+#BSUB -J hidden_covariate[1-625]
+#BSUB -W 24:00
+#BSUB -q medium 
+#BSUB -n 8
+#BSUB -M 30
+#BSUB -R rusage[mem=240]
+#BSUB -o /rsrch5/home/epi/bhattacharya_lab/users/whwu1/log
+#BSUB -e /rsrch5/home/epi/bhattacharya_lab/users/whwu1/log
+
+module add R/4.3.1
+Rscript /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/scripts/ncRNA_QTL/PRAD_hcp_validation.R $LSB_JOBINDEX
+#best k find to be:      
+#k lambda lambda2 lambda3 avg_error sim_num
+#275 100  10.00    0.01    1.00 0.6158545     275
