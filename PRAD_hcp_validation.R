@@ -202,8 +202,9 @@ cv_results <- cross_validate(F, Y, k_values, lambda_values, lambda2_values, lamb
 
 # save the results
 save(cv_results,file=paste0("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_hidden_cov/temp/5fold_CV_res_",sim_num,".RData"))
-
-
+# print(best_result)
+#      k lambda lambda2 lambda3     avg_error          file_index
+#      400 100     10    0.01       5 0.02356696        400
   
  # outFolder = '/rsrch5/home/epi/bhattacharya_lab/users/whwu1/temp/hidden_cov'
   #hcp <- hidden_convariate_linear(standardize(seqStatMat), 
