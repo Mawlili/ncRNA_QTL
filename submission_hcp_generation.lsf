@@ -8,4 +8,4 @@
 #BSUB -e /rsrch5/home/epi/bhattacharya_lab/users/whwu1/log
 
 module add R/4.3.1
-Rscript /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/scripts/ncRNA_QTL/hidden_covariate_generate.R
+Rscript /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/scripts/ncRNA_QTL/PRAD_hcp_generate.R
