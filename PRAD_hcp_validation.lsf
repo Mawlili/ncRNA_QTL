@@ -1,4 +1,4 @@
-#BSUB -J hidden_covariate[210-625]
+#BSUB -J hidden_covariate[1-39]
 #BSUB -W 24:00
 #BSUB -q medium 
 #BSUB -n 8
