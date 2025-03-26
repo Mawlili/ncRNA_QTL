@@ -3,7 +3,11 @@
 ########################################################################
 
 args <- commandArgs(trailingOnly = TRUE)
-sim_num <- as.numeric(args[1])
+job_index <- as.numeric(args[1])
+
+missing_ids <- scan("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_hidden_cov/temp/missing_cv_indices.txt")
+sim_num <- missing_ids[job_index]
+
 
 ########################################################################
 # load dependencies
