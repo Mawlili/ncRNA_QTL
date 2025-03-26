@@ -7,6 +7,7 @@ gc_metrics <- read.delim("PRAD_gcSummaryMetrics.txt", stringsAsFactors = FALSE)
 genome_metrics <- read.delim("PRAD_genomeMetrics.txt", stringsAsFactors = FALSE)
 txome_metrics <- read.delim("PRAD_txomeMetrics.txt", stringsAsFactors = FALSE)
 metadata <- read.csv("PRAD_metadata.csv", stringsAsFactors = FALSE)
+load("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_hidden_cov/PRAD_hcp.RData")
 
 # Merge files step-by-step using sample_ID
 merged1 <- merge(gc_metrics, genome_metrics, by = "sample_ID")
@@ -39,5 +40,10 @@ pca_data <- as.data.frame(pca_result$x[, 1:3])
 pca_data$TCGA_ID <- rownames(pca_data)
 cov_with_pca <- merge(final_merged, pca_data, by = "TCGA_ID")
 
+#Merge hcp
+hcp_z <- as.data.frame(hcp$Z)
+hcp_z$TCGA_ID <- rownames(hcp_z)
+cov_with_pca_hcp <- merge(cov_with_pca, hcp_z, by = "TCGA_ID")
+
 # Save merged output
-write.table(cov_with_pca, "PRAD_Merged_QC_Metrics_with_age_pca.txt", sep = "\t", row.names = FALSE, quote = FALSE)
+write.table(cov_with_pca_hcp, "PRAD_Merged_QC_Metrics_with_age_pca_hcp.txt", sep = "\t", row.names = FALSE, quote = FALSE)
