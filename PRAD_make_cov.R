@@ -47,3 +47,27 @@ cov_with_pca_hcp <- merge(cov_with_pca, hcp_z, by = "TCGA_ID")
 
 # Save merged output
 write.table(cov_with_pca_hcp, "PRAD_Merged_QC_Metrics_with_age_pca_hcp.txt", sep = "\t", row.names = FALSE, quote = FALSE)
+
+
+#test different # of hcp
+df <- read.delim("PRAD_Merged_QC_Metrics_with_age_pca_hcp.txt", stringsAsFactors = FALSE)
+
+# Find column indices
+base_cols <- which(colnames(df) == "PC3")  # get index of PC3
+
+# Define extra variable sets
+v_sets <- list(
+  V125 = paste0("V", 1:125),
+  V150 = paste0("V", 1:150),
+  V175 = paste0("V", 1:175),
+  V200 = paste0("V", 1:200),
+  V250 = paste0("V", 1:250)
+)
+
+for (name in names(v_sets)) {
+  cols_to_include <- c(1:base_cols, which(colnames(df) %in% v_sets[[name]]))
+  cov_subset <- df[, cols_to_include]
+  file_name <- paste0("cov_", name, ".tsv")
+  write.table(cov_subset, file = file_name, sep = "\t", row.names = FALSE, quote = FALSE)
+  cat("Saved:", file_name, "\n")
+}
