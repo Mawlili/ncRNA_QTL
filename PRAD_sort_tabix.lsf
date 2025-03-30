@@ -9,3 +9,9 @@ bgzip short_non_coding_overlap_sorted.bed
 
 tabix -p bed short_coding_overlap_sorted.bed.gz
 tabix -p bed short_non_coding_overlap_sorted.bed.gz
+
+bgzip short_coding_overlap_sorted_normalized.bed
+bgzip short_non_coding_overlap_sorted_normalized.bed
+
+tabix -p bed short_coding_overlap_sorted_normalized.bed.gz
+tabix -p bed short_non_coding_overlap_sorted_normalized.bed.gz
