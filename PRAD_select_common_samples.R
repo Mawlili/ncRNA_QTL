@@ -20,10 +20,16 @@ cov <- as.data.frame(cov)
 bed_cols <- c("Chr", "start", "end", "pid", "gid", "strand")
 cov_col <- c("TCGA_ID")
 
+
 overlap_cols_non_coding <- intersect(colnames(short_non_coding), samples)
 overlap_cols_coding     <- intersect(colnames(short_coding), samples)
-subset_non_coding <- short_non_coding[ , c(bed_cols, overlap_cols_non_coding)]
-subset_coding     <- short_coding[, c(bed_cols, overlap_cols_coding)]
+
+non_coding_col <- c(bed_cols, overlap_cols_non_coding)
+coding_col <- c(bed_cols, overlap_cols_coding)
+
+subset_non_coding <- short_non_coding[ , non_coding_col]
+subset_coding     <- short_coding[, coding_col]
+
 overlap_cov <- intersect(colnames(cov), samples)
 subset_cov <- cov[,c(cov_col, overlap_cov)]
 
