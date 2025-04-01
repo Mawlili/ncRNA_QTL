@@ -28,7 +28,7 @@ COV_FILE=${COV_FILES[$((LSB_JOBINDEX-1))]}
 VCF=/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/PRAD/PRAD_merged_renamed_filtered.vcf.gz
 BED=/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/input/short_non_coding_overlap_sorted_normalized.bed.gz
 COV_DIR=/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/input
-OUT_DIR=/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/significant_output
+OUT_DIR=/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/cis_qtl
 
 BASENAME=$(basename "$COV_FILE" .txt)
 OUT_FILE=${OUT_DIR}/cis_qtl_${BASENAME}.txt
