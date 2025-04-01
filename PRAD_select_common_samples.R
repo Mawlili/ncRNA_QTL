@@ -6,10 +6,10 @@ done
 vcf-merge *.vcf.vcf.gz > PRAD_merged.vcf
 bcftools query -l PRAD_merged.vcf > sample_list.txt
 sed 's/.*TCGA-PRAD_//' sample_list.txt > cleaned_sample_ids.txt 
-awk -F'-' '{print $1"-"$2"-"$3}' cleaned_sample_ids.txt  > short_TCGA_vcf_list.txt
+awk -F'-' '{print $1"-"$2"-"$3}' cleaned_sample_ids.txt  > short_sample_names.txt
 
 
-samples <- scan("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/PRAD/short_TCGA_vcf_list.txt", what = "", sep = "\t", quiet = TRUE)
+samples <- scan("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/PRAD/short_sample_names.txt", what = "", sep = "\t", quiet = TRUE)
 short_non_coding <- fread("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/input/short_non_coding.bed")
 short_non_coding <- as.data.frame(short_non_coding)
 short_coding <- fread("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/input/short_coding.bed")
