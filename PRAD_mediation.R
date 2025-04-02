@@ -5,7 +5,6 @@ pacman::p_load(dplyr, tidyr, readr,
 #source("./mediation_functions.R")
 library(tictoc)
 library(data.table)
-library(dplyr)
 
 P = 10000
 num_workers = 5
