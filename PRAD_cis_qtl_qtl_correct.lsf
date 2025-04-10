@@ -16,7 +16,7 @@ module add qtltools          #    --qtl /rsrch5/home/epi/bhattacharya_lab/projec
 #    --normal \
 #    --out /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/input/short_coding_overlap_sorted_normalized.bed
 
-#COV_FILES=(
+COV_FILES=(
     "short_cov_overlap_V250.txt"
     "short_cov_overlap_V125.txt"
     "short_cov_overlap_V150.txt"
