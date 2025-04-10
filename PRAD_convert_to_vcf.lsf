@@ -13,8 +13,14 @@
 module add plink
 
 cd /rsrch5/home/epi/bhattacharya_lab/data/TCGA/Prostate_Cancer/genotypes
+#merge bem bim fam
+plink --bfile 1.Prostate_Cancer \
+      --merge-list merge_list.txt \
+      --make-bed \
+      --out Prostate_Cancer_merged
+
 i=$LSB_JOBINDEX
 PREFIX="${i}.Prostate_Cancer"
 plink2 --bfile $PREFIX --recode vcf --out /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/PRAD/${i}.Prostate_Cancer.vcf
-
-echo "Converted ${PREFIX} to ${i}.Prostate_Cancer.vcf"
+cd /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/PRAD/
+bcftools concat -f merge_list.txt -Oz -o PRAD_merged_chr.vcf.gz
