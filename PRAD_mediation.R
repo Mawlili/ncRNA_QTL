@@ -221,8 +221,14 @@ if (!(nc_pc_aligned & snp_dosage_aligned & covar_aligned)) stop("data are not al
 # perform mediation analysis with triplets:
 # {SNP, distal pc gene, local ncRNA(s) }
 mediation_res_list <- vector("list", length = nrow(triplet_counts))
-for (t in seq_along(1:nrow(triplet_counts))) {
-  
+
+args <- commandArgs(trailingOnly = TRUE)
+job_id <- as.numeric(args[1])
+total_jobs <- nrow(triplet_counts)
+chunk_size <- 10000
+start_index <- (job_id - 1) * chunk_size + 1
+end_index <- min(job_id * chunk_size, total_jobs)
+for (t in  seq(start_index, end_index)) {
   cat("Triplet: ", t, "/", nrow(triplet_counts), "\n")
   
   # Get triplet
@@ -267,8 +273,14 @@ for (t in seq_along(1:nrow(triplet_counts))) {
                                nc_rna)
   
   # save as we go
-  saveRDS(do.call("bind_rows", mediation_res_list) |> as_tibble(), "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_mediation/mediation_res.RDS")
+ output_file <- file.path(
+                         "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_mediation/", 
+                          paste0("mediation_res_", job_id, ".RDS")
+                         )
+  
+  saveRDS(do.call("bind_rows", mediation_res_list) |> as_tibble(), output_file)
 }
 mediation_res <- do.call("bind_rows", mediation_res_list) |> as_tibble()
 
-saveRDS(mediation_res, "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_mediation/mediation_res.RDS")
+saveRDS(mediation_res, output_file)
+
