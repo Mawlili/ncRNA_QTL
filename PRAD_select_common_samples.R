@@ -1,12 +1,5 @@
 library(data.table)
-for file in *.vcf.vcf; do
-  bgzip -f "$file"         # creates file.vcf.vcf.gz
-  tabix -p vcf "${file}.gz"  # creates file.vcf.vcf.gz.tbi
-done
-vcf-merge *.vcf.vcf.gz > PRAD_merged.vcf
-bcftools query -l PRAD_merged.vcf > sample_list.txt
-sed 's/.*TCGA-PRAD_//' sample_list.txt > cleaned_sample_ids.txt 
-awk -F'-' '{print $1"-"$2"-"$3}' cleaned_sample_ids.txt  > short_sample_names.txt
+
 
 
 samples <- scan("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/PRAD/short_sample_names.txt", what = "", sep = "\t", quiet = TRUE)
