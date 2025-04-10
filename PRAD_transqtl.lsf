@@ -16,7 +16,7 @@ module add qtltools          #    --qtl /rsrch5/home/epi/bhattacharya_lab/projec
 #    --normal \
 #    --out /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/input/short_coding_overlap_sorted_normalized.bed
 
-QTLtools trans --vcf /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/PRAD/PRAD_merged_renamed_filtered.vcf.gz \
+QTLtools trans --vcf /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/PRAD/PRAD_merged_chr_short.vcf.gz \
              --bed /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/input/short_coding_overlap_sorted_normalized.bed.gz \
              --cov /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/input/short_cov_overlap_V250.txt \
              --out /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/trans_qtl/significant_output_trans_qtl_protein_coding.txt \
