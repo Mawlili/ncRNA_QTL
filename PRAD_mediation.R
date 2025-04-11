@@ -225,7 +225,7 @@ mediation_res_list <- vector("list", length = nrow(triplet_counts))
 args <- commandArgs(trailingOnly = TRUE)
 job_id <- as.numeric(args[1])
 total_jobs <- nrow(triplet_counts)
-chunk_size <- 1000
+chunk_size <- 500
 start_index <- (job_id - 1) * chunk_size + 1
 end_index <- min(job_id * chunk_size, total_jobs)
 for (t in  seq(start_index, end_index)) {
