@@ -139,8 +139,8 @@ covar[102, ] <- ifelse(covar[102, ] == "female", 1,
 covar <- data.frame(lapply(covar, as.numeric))
 
 # gene expression data
-nc_bed <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_non_coding_overlap_sorted.bed") |> dplyr::select(-pid)
-pc_bed <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_coding_overlap_sorted.bed") |> dplyr::select(-pid)
+nc_bed <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_non_coding_overlap_sorted_normalized.bed") # |> dplyr::select(-pid)
+pc_bed <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_coding_overlap_sorted_normalized.bed") # |> dplyr::select(-pid)
 # SNP dosages
 snp_dosage <- readRDS("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/out_files/snp_dosage.RDS")
 
@@ -167,11 +167,11 @@ nc_bed <- nc_bed %>%
 
 pc_intriplet_express <- pc_bed |>
   dplyr::filter(gid %in% unique(triplets$distal_pc)) |>
-  dplyr::select("#Chr", "start", "end", "gid", "strand",
+  dplyr::select("#chr", "start", "end", "gid", "strd",
          all_of(exp_cov_intersect))
 nc_intriplet_express <- nc_bed |>
   dplyr::filter(gid %in% unique(triplets$local_nc)) |>
-  dplyr::select("#Chr", "start", "end", "gid", "strand",
+  dplyr::select("#chr", "start", "end", "gid", "strd",
          all_of(exp_cov_intersect))
 
 # make expression data samples x genes
@@ -216,7 +216,7 @@ if (!(nc_pc_aligned & snp_dosage_aligned & covar_aligned)) stop("data are not al
 args <- commandArgs(trailingOnly = TRUE)
 job_id <- as.numeric(args[1])
 total_jobs <- nrow(triplet_counts)
-chunk_size <- 10000
+chunk_size <- 1000
 start_index <- (job_id - 1) * chunk_size + 1
 end_index <- min(job_id * chunk_size, total_jobs)
 for (t in  seq(start_index, end_index)) {
