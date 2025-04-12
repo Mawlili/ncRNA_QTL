@@ -122,7 +122,94 @@ mediation_analysis <- function(Y_G, X_S, M, X_C,
 }
 
 #load prepared Rdata
-load("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/mediation/mediation_input.RData")
+triplets <- readRDS("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/out_files/triplets.RDS")
+triplet_counts <- readRDS("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/out_files/triplet_counts.RDS")
+# covariates
+#covar <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/cov_remove_duplicate.txt",
+ #                        col_names = TRUE)[,-1]
+
+covar <- read.table("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/cov_remove_duplicate.txt", 
+                 header = TRUE, 
+                 sep = "\t", 
+                 stringsAsFactors = FALSE, 
+                 check.names = FALSE)
+covar <- covar[, -1]
+covar[102, ] <- ifelse(covar[102, ] == "female", 1,
+                            ifelse(covar[102, ] == "male", 2, covar[102, ]))
+covar <- data.frame(lapply(covar, as.numeric))
+
+# gene expression data
+nc_bed <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_non_coding_overlap_sorted.bed") |> dplyr::select(-pid)
+pc_bed <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_coding_overlap_sorted.bed") |> dplyr::select(-pid)
+# SNP dosages
+snp_dosage <- readRDS("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/out_files/snp_dosage.RDS")
+
+# Step 2: Data engineer
+# X_C: Matrix of mean-centered covariates (n samples x k covariates)
+covar_ids <- colnames(covar)
+
+covar_ids <- gsub("\\.", "-", covar_ids)
+X_C <- covar |>
+  t() |>
+  tidyr::as_tibble() |>
+  reframe(across(everything(), ~ . - mean(., na.rm = TRUE))) |>
+  as.matrix()
+
+# filter to genes that appear at least once in triplets
+# and to samples with covariates
+exp_cov_intersect <- intersect(colnames(pc_bed),
+                               covar_ids)
+pc_bed <- pc_bed %>%
+  mutate(gid = sub("\\..*", "", gid))
+nc_bed <- nc_bed %>%
+  mutate(gid = sub("\\..*", "", gid))
+
+
+pc_intriplet_express <- pc_bed |>
+  dplyr::filter(gid %in% unique(triplets$distal_pc)) |>
+  dplyr::select("#Chr", "start", "end", "gid", "strand",
+         all_of(exp_cov_intersect))
+nc_intriplet_express <- nc_bed |>
+  dplyr::filter(gid %in% unique(triplets$local_nc)) |>
+  dplyr::select("#Chr", "start", "end", "gid", "strand",
+         all_of(exp_cov_intersect))
+
+# make expression data samples x genes
+pc_long <- pc_intriplet_express |>
+  dplyr::select(gid, contains("TCGA")) |>
+  tidyr::pivot_longer(contains("TCGA"),
+                      names_to = "sample_id",
+                      values_to = "exp")
+
+pc_wide <- pc_long |>
+  tidyr::pivot_wider(names_from = gid,
+                    values_from = exp,
+                      values_fn = mean)
+
+nc_long <- nc_intriplet_express |>
+  dplyr::select(gid, contains("TCGA")) |>
+  tidyr::pivot_longer(contains("TCGA"),
+                      names_to = "sample_id",
+                      values_to = "exp")
+
+nc_wide <- nc_long |>
+  tidyr::pivot_wider(names_from = gid,
+                     values_from = exp,
+                        values_fn = mean)
+
+# Subset SNP dosage matrix to SNPs of interest
+sig_snp_dosage <- snp_dosage[,which(colnames(snp_dosage) %in% triplets$snp_id)]
+
+# Make sure samples by sample_id are aligned across data-sources
+nc_wide <- nc_wide[match(covar_ids, nc_wide$sample_id), ]
+pc_wide <- pc_wide[match(covar_ids, pc_wide$sample_id), ]
+sig_snp_dosage <- sig_snp_dosage[match(covar_ids, rownames(sig_snp_dosage)), ]
+
+nc_pc_aligned <- sum(nc_wide$sample_id == pc_wide$sample_id) == nrow(nc_wide)
+snp_dosage_aligned <- sum(nc_wide$sample_id == rownames(sig_snp_dosage)) == nrow(nc_wide)
+covar_aligned <- sum(nc_wide$sample_id == covar_ids) == nrow(nc_wide)
+if (!(nc_pc_aligned & snp_dosage_aligned & covar_aligned)) stop("data are not aligned.")
+
 
 
 #mediation analysis
