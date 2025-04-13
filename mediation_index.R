@@ -213,6 +213,7 @@ if (!(nc_pc_aligned & snp_dosage_aligned & covar_aligned)) stop("data are not al
 
 
 #mediation analysis
+mediation_res_list <- vector("list", length = nrow(triplet_counts))
 args <- commandArgs(trailingOnly = TRUE)
 job_id <- as.numeric(args[1])
 total_jobs <- nrow(triplet_counts)
