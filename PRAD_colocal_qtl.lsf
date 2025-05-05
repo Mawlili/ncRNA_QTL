@@ -27,4 +27,4 @@ module add qtltools
   --nominal \
   --threshold 1 \
   --normal \
-  --std-err
+#  --std-err
