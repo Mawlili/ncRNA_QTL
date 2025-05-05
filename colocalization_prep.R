@@ -57,6 +57,10 @@ qtl_files <- list(
   PRAD_protein = "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_mediation/cis_qtl_output/significant_output_cis_qtl_protein_coding.txt",
   PRAD_ncRNA   = "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_mediation/cis_qtl_output/significant_output_cis_qtl_non_protein_coding.txt"
 )
+qtl_files_trans <- list(
+  BRCA_protein = "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/BRCA_mediation_filtered/cis_qtl_output/significant_output_trans_qtl_protein_coding.txt.hits.txt.gz",
+  PRAD_protein = "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_mediation/cis_qtl_output/significant_output_trans_qtl_protein_coding.txt.hits.txt.gz"
+)
 
 vcf_to_lookup <- function(vcf_path) {
   v <- read.vcfR(vcf_path, verbose = FALSE)         # ⏱ a minute or two for whole‑genome VCF
@@ -83,17 +87,48 @@ process_qtl <- function(path, lookup) {
   merge(dt, lookup, by = "SNP", all.x = TRUE)
 }
 
+process_qtl_trans <- function(path, lookup) {
+  dt <- fread(path, header = FALSE, showProgress = FALSE)
+
+  ## keep columns 8 1 14 15 12  →  SNP, ncRNA, beta, SE, P_value
+  dt <- dt[, .(SNP      = V4,
+               pcGene    = V1,
+               beta     = V9,
+               P_value  = V7)]
+
+  merge(dt, lookup, by = "SNP", all.x = TRUE)
+}
+
 lookup_map <- list(
-  BRCA_protein = lookup_BRCA,
   BRCA_ncRNA   = lookup_BRCA,
-  PRAD_protein = lookup_PRAD,
   PRAD_ncRNA   = lookup_PRAD
+)
+
+lookup_map_trans <- list(
+  BRCA_protein = lookup_BRCA,
+  PRAD_protein = lookup_PRAD
 )
 
 
 for (nm in names(qtl_files)) {
   message("Processing ", nm, " …")
   dt <- process_qtl(qtl_files[[nm]], lookup_map[[nm]])
+
+  ## choose an output name that’s easy to spot:
+  ##   e.g. “BRCA_protein_with_REF_ALT.tsv”
+  out_name <- paste0(nm, "_with_REF_ALT.tsv")
+
+  fwrite(dt,
+         file   = out_name,
+         sep    = "\t",
+         quote  = FALSE)
+
+  message("  ↳ wrote ", out_name)
+}
+
+for (nm in names(qtl_files_trans)) {
+  message("Processing ", nm, " …")
+  dt <- process_qtl_trans(qtl_files_trans[[nm]], lookup_map_trans[[nm]])
 
   ## choose an output name that’s easy to spot:
   ##   e.g. “BRCA_protein_with_REF_ALT.tsv”
