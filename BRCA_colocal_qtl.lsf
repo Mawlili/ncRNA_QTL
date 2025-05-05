@@ -25,6 +25,6 @@ QTLtools trans --vcf /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/fi
              --nominal \
              --threshold 1 \
              --normal \
-             --std-err
+#             --std-err
 
 
