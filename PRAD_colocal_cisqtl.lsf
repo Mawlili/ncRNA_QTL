@@ -16,7 +16,8 @@ QTLtools cis \
   --cov /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/input/short_cov_overlap_V25.txt \
   --out  /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_mediation/cis_qtl_output/significant_output_cis_qtl_non_protein_coding.txt \
   --nominal 1 \
-  --normal
+  --normal \
+ -std-err
 
  QTLtools cis \
   --vcf /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/PRAD/PRAD_merged_chr_short.vcf.gz \
@@ -24,4 +25,5 @@ QTLtools cis \
   --cov /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/input/short_cov_overlap_V25.txt \
   --out  /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_mediation/cis_qtl_output/significant_output_cis_qtl_protein_coding.txt \
   --nominal 1 \
-  --normal
+  --normal \ 
+  -std-err
