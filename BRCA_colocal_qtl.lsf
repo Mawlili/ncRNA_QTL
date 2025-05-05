@@ -14,7 +14,7 @@ module add qtltools
 #               --bed /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/BRCA_mediation_filtered/nc_sig_mediation_filtered.bed.gz \
 #               --cov /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_cov_overlap.txt \
 #               --out /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/BRCA_mediation_filtered/cis_qtl_output/significant_output_cis_qtl_non_protein_coding.txt \
-#               --nominal 1 \
+#               --nominal \
 #               --normal \
 #               -- std-err 
 
@@ -22,7 +22,8 @@ QTLtools trans --vcf /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/fi
              --bed /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/BRCA_mediation_filtered/pc_sig_mediation_filtered.bed.gz \
              --cov /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_cov_overlap.txt \
              --out /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/BRCA_mediation_filtered/cis_qtl_output/significant_output_trans_qtl_protein_coding.txt \
-             --nominal 1 \
+             --nominal \
+             --threshold 1 \
              --normal \
              --std-err
 
