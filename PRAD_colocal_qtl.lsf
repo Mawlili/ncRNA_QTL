@@ -1,0 +1,29 @@
+#BSUB -J cis_qtl[1-5]
+#BSUB -W 24:00
+#BSUB -o /rsrch5/home/epi/bhattacharya_lab/users/whwu1/log
+#BSUB -e /rsrch5/home/epi/bhattacharya_lab/users/whwu1/log
+#BSUB -q medium 
+#BSUB -n 5
+#BSUB -M 50
+#BSUB -R rusage[mem=250]
+#BSUB -u whwu1@mdanderson.org
+
+module add qtltools
+# Run QTLtools
+#QTLtools cis \
+#  --vcf /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/PRAD/PRAD_merged_chr_short.vcf.gz \
+#  --bed /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_mediation/nc_sig_mediation_filtered.bed.gz \
+#  --cov /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/input/short_cov_overlap_V25.txt \
+#  --out  /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_mediation/cis_qtl_output/significant_output_cis_qtl_non_protein_coding.txt \
+#  --nominal 1 \
+#  --normal \
+# -- std-err
+
+ QTLtools trans \
+  --vcf /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/PRAD/PRAD_merged_chr_short.vcf.gz \
+  --bed /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_mediation/pc_sig_mediation_filtered_common.bed.gz \
+  --cov /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/input/short_cov_overlap_V25.txt \
+  --out  /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_mediation/cis_qtl_output/significant_output_trans_qtl_protein_coding.txt \
+  --nominal 1 \
+  --normal \ 
+  -- std-err
