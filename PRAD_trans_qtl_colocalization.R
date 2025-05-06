@@ -44,21 +44,29 @@ for (row_i in seq_len(nrow(med))) {
   fwrite(win_dt[, .(chr, start, end)], bed_path, sep = "\t", col.names = FALSE)
 
   # ── 2a. Slice VCF with plink2 -----------------------------------------------
-  vcf_slice <- file.path(row_dir, "snps.vcf.gz")
-  
-  plink_cmd <- sprintf(
-    "plink2 --threads %d --vcf %s --chr %s --from-bp %d --to-bp %d --export vcf bgz --out %s",
-    threads,
-    vcf_file,
-    paste(unique(win_dt$chr), collapse=","),
-    min(win_dt$start),
-    max(win_dt$end),
-    sub("\\.vcf.gz$", "", vcf_slice)
-  )
-  cat("   • PLINK2 cmd:\n     ", plink_cmd, "\n")
-  status <- system(plink_cmd)
-  if (status != 0) { cat("   ✖ plink2 failed → skip row\n"); next }
-  system(sprintf("tabix -p vcf %s", vcf_slice))
+   vcf_prefix <- file.path(row_dir, "snps")       # will create snps.vcf.gz
+vcf_slice  <- paste0(vcf_prefix, ".vcf.gz")
+
+## 1.  Write a ranges.txt file:  chr <tab> start <tab> end
+range_file <- file.path(row_dir, "ranges.txt")
+fwrite(unique(win_dt[, .(chr, start, end)]), range_file,
+       sep = "\t", col.names = FALSE)
+
+## 2.  Call plink2 with --extract range
+plink_cmd <- sprintf(
+  "plink2 --threads %d --vcf %s --extract range %s --export vcf bgz --out %s",
+  threads,
+  vcf_file,
+  range_file,
+  vcf_prefix
+)
+
+cat("   • PLINK2 cmd:\n     ", plink_cmd, "\n")
+if (system(plink_cmd) != 0) {              # run plink2
+  cat("   ✖ plink2 failed → skip row\n"); next
+}
+
+system(sprintf("tabix -p vcf %s", vcf_slice)) 
 
   # ── 2b. Trim expression BED to pc_gene --------------------------------------
  bed_plain  <- file.path(row_dir, "pc_gene.bed")
