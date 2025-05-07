@@ -67,7 +67,7 @@ qtl_files <- list(
 )
 qtl_files_trans <- list(
   BRCA_protein = "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/BRCA_mediation_filtered/cis_qtl_output/significant_output_trans_qtl_protein_coding.txt.hits.txt.gz",
-  PRAD_protein = "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_mediation/cis_qtl_output/significant_output_trans_qtl_protein_coding.txt.hits.txt.gz"
+  PRAD_protein = "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_mediation/trans_qtl_results/combined_nominal_hits.tsv"
 )
 
 vcf_to_lookup <- function(vcf_path) {
