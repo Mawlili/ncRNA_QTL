@@ -24,8 +24,8 @@ bp_window <- 1e6
 pred_nc_grex <- paste0(worker_id, "_pred_nc_grex.txt")
 data_dir <- "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/BRCA_gbat/1_dataprep/data/"
 home_dir <- "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/BRCA_gbat/"
-results_dir <- "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/BRCA_gbat/results"
-model_dir <- "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/BRCA_gbat/results/best_models"
+results_dir <- "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/BRCA_gbat/results/"
+model_dir <- "/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/BRCA_gbat/results/best_models/"
 
 #########################
 ## Libraries/Functions ##
