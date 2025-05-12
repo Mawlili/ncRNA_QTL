@@ -96,7 +96,7 @@ worker_indices <- all_indices[start_idx:end_idx]
 cat("Worker", worker_id, "handles indices", start_idx, "to", end_idx, "\n")
 
 worker_ncrna <- nc_gr$gid[worker_indices]
-
+#Gene: ENSG00000275503.1 (i = 366 )
 tictoc::tic()
 nc_rna_list <- list() 
 for (i in seq_along(1:length(worker_ncrna))) {
@@ -131,12 +131,16 @@ for (i in seq_along(1:length(worker_ncrna))) {
   YX <- nc_bed_long |>
     as_tibble() |>
     dplyr::select(sample_id, expression, gid) |>
-    filter(gid == ncrna) |>
-    inner_join(dosages, by = "sample_id") |>
+    dplyr::filter(gid == ncrna) |>
+    dplyr::inner_join(dosages, by = "sample_id") |>
     dplyr::select(-gid, -sample_id)
   
   Y <- YX |> dplyr::select(expression) |> scale() |> as.matrix()
   X <- YX |> dplyr::select(-expression) |> as.matrix()
+   if (anyNA(Y)) {
+    cat("  » Expression matrix contains NA/NaN – skipping\n")
+    next
+  }
   if (ncol(X) == 0) next
   
   cat("Dimensions of Y:", dim(Y), "\n")
