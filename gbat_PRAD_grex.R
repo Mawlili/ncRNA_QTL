@@ -137,6 +137,10 @@ for (i in seq_along(1:length(worker_ncrna))) {
   
   Y <- YX |> dplyr::select(expression) |> scale() |> as.matrix()
   X <- YX |> dplyr::select(-expression) |> as.matrix()
+  if (anyNA(Y)) {
+    cat("  » Expression vector contains NA/NaN – skipping\n")
+    next
+  }
   if (ncol(X) == 0) next
   
   cat("Dimensions of Y:", dim(Y), "\n")
