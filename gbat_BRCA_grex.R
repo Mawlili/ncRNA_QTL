@@ -137,8 +137,8 @@ for (i in seq_along(1:length(worker_ncrna))) {
   
   Y <- YX |> dplyr::select(expression) |> scale() |> as.matrix()
   X <- YX |> dplyr::select(-expression) |> as.matrix()
-   if (anyNA(Y)) {
-    cat("  » Expression matrix contains NA/NaN – skipping\n")
+   if (anyNA(Y) || length(unique(as.numeric(Y))) < 50) {
+     cat("  » Expression matrix contains NA/NaN or 0 var – skipping\n")
     next
   }
   if (ncol(X) == 0) next
