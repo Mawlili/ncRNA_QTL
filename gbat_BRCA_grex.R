@@ -48,7 +48,7 @@ source(paste0(home_dir, "grex_functions.R"))
 ## read in data ##
 ##################
 # non-coding
-nc_bed <- readr::read_delim(paste0(data_dir, "nc.bed"))
+nc_bed <- readr::read_delim(paste0(data_dir, "nc_new.bed"))
 nc_bed_long <- nc_bed |>
   pivot_longer(cols = contains("TCGA"),
                names_to = "sample_id",
