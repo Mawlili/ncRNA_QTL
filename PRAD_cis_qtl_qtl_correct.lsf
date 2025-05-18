@@ -1,4 +1,4 @@
-#BSUB -J cis_qtl[1-5]
+#BSUB -J cis_qtl
 #BSUB -W 24:00
 #BSUB -o /rsrch5/home/epi/bhattacharya_lab/users/whwu1/log
 #BSUB -e /rsrch5/home/epi/bhattacharya_lab/users/whwu1/log
@@ -36,10 +36,10 @@ OUT_FILE=${OUT_DIR}/cis_qtl_${BASENAME}.txt
 
 # Run QTLtools
 QTLtools cis \
-  --vcf "$VCF" \
-  --bed "$BED" \
-  --cov "${COV_DIR}/${COV_FILE}" \
-  --out "$OUT_FILE" \
+  --vcf /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/PRAD/PRAD_merged_chr_short.vcf.gz \
+  --bed /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/input/nc_sorted.bed.gz \
+  --cov /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/input/short_cov_overlap_V250.txt \
+  --out /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/cis_qtl/significant_output_cis_qtl_non_protein_coding_V150.txt \
   --nominal 1e-6 \
   --normal
 
