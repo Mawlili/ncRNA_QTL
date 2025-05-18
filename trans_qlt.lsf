@@ -14,5 +14,6 @@ QTLtools trans --vcf /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/vcf/fi
              --bed /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/pc_fixed_sorted.bed.gz \
              --cov /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_cov_overlap.txt \
              --out /rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/significant_output_trans_qtl_protein_coding.txt \
-             --nominal 1e-6
+             --nominal \
+            -- treshhold 1e-6 \
              --normal
