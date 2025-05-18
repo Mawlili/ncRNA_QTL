@@ -146,8 +146,8 @@ covar <- covar[, -1]
 covar <- data.frame(lapply(covar, as.numeric))
 
 # gene expression data
-nc_bed <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/input/short_non_coding_overlap_sorted_normalized.bed") |> dplyr::select(-id)
-pc_bed <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/input/short_coding_overlap_sorted_normalized.bed") |> dplyr::select(-id)
+nc_bed <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/input/nc_sorted.bed") |> dplyr::select(-id)
+pc_bed <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/input/pc_sorted.bed") |> dplyr::select(-id)
 # SNP dosages
 snp_dosage <- readRDS("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/snp_dosage.RDS")
 
