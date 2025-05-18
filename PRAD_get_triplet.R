@@ -24,7 +24,7 @@ colnames(distal_pc) <- c(
 distal_pc <- distal_pc[,c("gene_id", "snp_id")]
 
 # local non-coding results
-local_nc <- readr::read_delim("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/cis_qtl/cis_qtl_short_cov_overlap_V250.txt",
+local_nc <- readr::read_delim("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/PRAD_qtl/cis_qtl/cis_qtl_short_cov_overlap_V150.txt",
                               col_names = FALSE)[,c(1, 8)]
 # colnames(local_nc) <- c("gene_id", "chr", "start", "end",
 #                         "strand", "total_num_tested", "distance",
