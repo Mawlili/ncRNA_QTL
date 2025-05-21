@@ -139,8 +139,8 @@ covar[102, ] <- ifelse(covar[102, ] == "female", 1,
 covar <- data.frame(lapply(covar, as.numeric))
 
 # gene expression data
-nc_bed <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_non_coding_overlap_sorted_normalized.bed") # |> dplyr::select(-pid)
-pc_bed <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/short_coding_overlap_sorted_normalized.bed") # |> dplyr::select(-pid)
+nc_bed <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/nc_sorted.bed") # |> dplyr::select(-pid)
+pc_bed <- readr::read_tsv("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/input/pc_fixed_sorted.bed") # |> dplyr::select(-pid)
 # SNP dosages
 snp_dosage <- readRDS("/rsrch5/home/epi/bhattacharya_lab/projects/ncRNA_QTL/qtl/out_files/snp_dosage.RDS")
 
